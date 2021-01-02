@@ -1,0 +1,263 @@
+%Usually an article, 12pt font, with a seperate title page
+\documentclass[12pt,titlepage]{article}
+%Ability to include figures easily, and eps files
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{epstopdf}
+\usepackage{epsfig}
+\usepackage[euler]{textgreek}
+%Hide links on autoref, and call each piece a section
+\usepackage[hidelinks]{hyperref}
+\def\subsectionautorefname{Section}
+\def\subsubsectionautorefname{Section}
+%Allows symbols, captions, math
+\usepackage{amssymb}
+% \usepackage{amsmath} %can also use to align equations
+\usepackage{caption}
+%Allow acronyms, with the list beneath
+\usepackage[nolist,nohyperlinks]{acronym}
+\begin{acronym}
+\end{acronym}
+%Use natbib for bibliography
+\usepackage[square,super,comma,sort&compress]{natbib}
+%Style changes, indent all paragraphs, use the full page size, change the section heads, nice fractions, nice tables
+\usepackage{indentfirst}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage[small]{titlesec}
+\titlelabel{\thetitle. }
+\usepackage{nicefrac}
+\usepackage{booktabs}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+%Allows for me to non-justify some regions
+\usepackage{ragged2e}
+
+% Another package for doing title of assignment --> got it from Joel
+%\usepackage{titlesec}
+%\titleformat{\subsection}[runin]
+%{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+%\titleformat{\subsubsection}[runin]
+%{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\usepackage{pdflscape}
+\usepackage{enumitem}% http://ctan.org/pkg/enumitem
+\usepackage{adjustbox}
+
+
+
+\begin{document}
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%	HEADING SECTIONS
+
+\textsc{\LARGE McMaster University}\\[1.5cm] % Name of your university/college
+\textsc{\Large MECHTRON 4TB6A}\\[0.5cm] % Major heading such as course name
+\textsc{\large Mechatronics \& Software Engineering Capstone}\\[0.5cm] % Minor heading such as course title
+
+%	TITLE SECTION
+\vspace{1cm}
+\HRule \\[0.2cm]
+{ \Large \vspace{0.25cm}  \textsc{  \LARGE Development Process \& Implementation} \vspace{0.3cm} }  % Title of your document
+\HRule \vspace{1cm}
+
+\textsc{\LARGE Health Mate - Pill Dispenser}
+ 
+ \begin{figure}[h]
+  \centering
+  \includegraphics[width=.4\linewidth]{../ApexEngineering.png}
+\end{figure}
+ \vspace{1cm}
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{c c c}
+\toprule
+\textbf{Name} & \textbf{Student Number} & \textbf{McMaster Email}         \\ \midrule
+Justin Ballaro & 400015482 & ballaroj@mcmaster.ca \\
+Joel Bates & 001420696 & batesjj@mcmaster.ca \\
+Brodie Bresette & 400029059 & bresettb@mcmaster.ca \\
+Nicholas D'Angelo & 400018631 &  dangelon@mcmaster.ca  \\
+Daniel Pietrangelo & 400010287 &  pietrand@mcmaster.ca \\
+  \bottomrule
+\end{tabular}
+\label{Tab:HU}
+\end{table}
+
+%	DATE SECTION
+\vfill
+{\large Sunday, November 8, 2020}\\[3cm] % Date, change the \today to a set date if you want to be precise
+ % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\pagebreak
+\pagenumbering{roman}
+\tableofcontents
+\pagebreak
+\pagenumbering{arabic}
+
+\section{Table of Revisions}
+
+\begin{table}[ht!]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\small
+\begin{tabular}{|p{0.1\textwidth}|p{0.1\textwidth}|p{0.2\textwidth}|p{0.4\textwidth}|}
+ \hline
+ \textbf{Revision } & \textbf{Date} &
+ \textbf{Authors} &
+ \textbf{Revision Comments}\\
+ \hline \centering
+ 0 & \centering
+ 11/8/2020 & 
+ Justin Ballaro \newline
+Joel Bates \newline
+Brodie Bresette \newline
+Nicholas D'Angelo \newline
+Daniel Pietrangelo &
+Initial Revision \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Table of Revisions}
+\end{table}
+
+\pagebreak
+
+\section{Version Control}
+The team will be using a private Gitlab repository for all software version control. A master-feature branch workflow will be used for this project. This workflow entails creating new branches based from the master when new features are being developed. Once these new features are thoroughly tested and stable, they will be merged into the master branch. Commits will be based on the context of the change and the files involved in the change. Any considerable amount of changes to a large set of source code should be committed to keep consistency across team members.  
+\section{Overall Process Workflow}
+An overview of each step to be taken, along with their respective inputs/outputs and output acceptance criteria can be found in the table below.
+
+\begin{table}[ht!]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\large
+\begin{tabular}{|p{0.5\textwidth}|p{0.5\textwidth}|p{0.5\textwidth}|p{0.5\textwidth}|}
+ \hline
+ \textbf{Step} & \textbf{Input} & \textbf{Output} & \textbf{Output Acceptance Criteria}\\
+ \hline
+ Single silo dispensing one pill at a time. & 3 initial pill sizes. \newline Dispensing mechanism. \newline & A single pill dispensed from the dispensing machine. & 99.9\% accuracy (no more than one pill dispensed). \\
+ \hline
+ Develop Public and Secure Website & Various web-development frameworks. & Interactive user-interface to deploy data to the pill dispensing machine. Public Domain website with general medical knowledge for patients. & Scheduling data correctly deploys onto the pill dispensing board.\\
+ \hline
+ Full dispenser beta test & All silo positions in the dispensing machine. \newline 3 initial pill sizes. & Functioning dispensing mechanism for a total of 8 pill silos. & Dispensing one pill at a time with 99.9\% success rate. \\
+ \hline
+ Fine tuning to include intermediate pill sizes & Pill dispensing machine. \newline Full variety of pill sizes. & A single pill dispensed, regardless of its size. & 99.9\% accuracy in dispensing one pill at a time.\\
+ \hline
+ Aesthetic design for Pill Dispensing machine & Feedback from design team. & A more polished looking pill dispenser. & Looks and feels like a product that can be found in stores for sale. \\
+ \hline
+ 
+ 
+ 
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Step Workflow  Table}
+\end{table}
+
+
+\section{Details on Step Completion}
+\subsection{Team Member Roles \& Responsibilities}
+\subsubsection{Justin Ballaro}
+\begin{itemize}
+    \item Responsible for the programming of the microcontroller and I/O devices.
+    \item Responsible for the 3D printing of parts needed.
+    \item Responsible for the design of any needed PCBs.
+\end{itemize}
+\subsubsection{Joel Bates}
+\begin{itemize}
+    \item Responsible for the website design for the professional and for the end user.
+    \item Responsible for the secure transfer of data between the website and device.
+\end{itemize}
+\subsubsection{Brodie Bresette}
+\begin{itemize}
+    \item Responsible for the mechanical design of the pill dispensing device.
+    \item Responsible for the 3D printing of parts needed.
+\end{itemize}
+\subsubsection{Nicholas D'Angelo}
+\begin{itemize}
+    \item Responsible for the website design for the professional and for the end user.
+    \item Responsible for the secure transfer of data between the website and device.
+\end{itemize}
+\subsubsection{Daniel Pietrangelo}
+\begin{itemize}
+    \item Responsible for assembling and testing the beta and final versions of the product.
+    \item Responsible for assisting with all other aspects of the project where needed.
+\end{itemize}
+\subsection{Tools}
+\begin{itemize}
+    \item AutoDesk Inventor Professional 2020 \& Fusion 360
+    \begin{itemize}
+        \item Will be used for designing silos and other physical/mechanical aspects of the device. Stress and other mechanical related tests will also be performed in these programs as needed.
+    \end{itemize}
+    \item Cura 
+    \begin{itemize}
+        \item For slicing and 3D printing.
+    \end{itemize}
+    \item MATLAB Simulink
+    \begin{itemize}
+        \item Design the embedded system FSM.
+    \end{itemize}
+   \item Visual Studio Code
+    \begin{itemize}
+        \item IDE of choice for web side code.
+    \end{itemize}
+    \item ReactJS
+    \begin{itemize}
+        \item This web framework will be used to design the front end for all web aspects of the project.
+    \end{itemize}
+    \item Javascript
+    \begin{itemize}
+        \item Will be used for web backend and communication.
+    \end{itemize}
+    \item SQLite
+    \begin{itemize}
+        \item Data storage on the device and in the web as needed.
+    \end{itemize}
+    \item QT C++ Framework
+    \begin{itemize}
+        \item Will be used to implement on device LCD UI.
+    \end{itemize}
+\end{itemize}
+
+\section{Dealing With Changes to Development Artifacts}
+Any requests for bug fixes or change requests will be created through Gitlab's internal issue assignment system. When a new request is brought up by the team, a new 'issue' request will be created in Gitlab. A description of the change will be added to the request along with an assignment to the team member who will be responsible for completing the task. Once the request has been added, the assigned team will create a branch from master with the name in the following format 'issue\_number-branch-description'. This will allow the branch to be associated to the issue on Gitlab for easier referencing and tracking of the request. The issue will also be tagged with a severity level to help team members decide what assigned issue should be done next.\par
+The use of Gitlab's internal issue assignment system also describes how the team will document change request/bugs. The Gitlab repository will hold all references to issues created along with a detailed description as stated above.
+
+Changes will be classified as followed:
+
+\begin{table}[ht!]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\small
+\begin{tabular}{|p{0.5\textwidth}|p{0.5\textwidth}|}
+ \hline
+ \textbf{Type of Change} & \textbf{Description} \\
+ \hline
+ Feature Request & Adding new functionality \\
+ \hline
+ Bug Fix & Correcting an existing feature or device functionality that is not performing properly or as expected. \\
+ \hline
+ 
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Type of changes table}
+\end{table}
+
+Changes will be assigned to team members based on what section of the project they are currently leading and their strengths. What order tasks should be completed should be decided by the issue severity. The severity levels will state how much the issue will block other large parts of the project and will also state the importance of the issue. If an assigned issue prevents a large part of the project from being completed, it should be done first.\newline
+All members will be assigned as reviewers on an issue and should review the final solution before the solution will be accepted. However, a solution will only be put up towards the whole team after the team lead and associated support engineers have agreed upon the solution at hand. 
+
+
+\end{document}
