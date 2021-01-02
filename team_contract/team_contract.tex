@@ -1,0 +1,118 @@
+%Usually an article, 12pt font, with a seperate title page
+\documentclass[12pt,titlepage]{article}
+%Ability to include figures easily, and eps files
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{epstopdf}
+\usepackage{epsfig}
+\usepackage[euler]{textgreek}
+%Hide links on autoref, and call each piece a section
+\usepackage[hidelinks]{hyperref}
+\def\subsectionautorefname{Section}
+\def\subsubsectionautorefname{Section}
+%Allows symbols, captions, math
+\usepackage{amssymb}
+\usepackage{amsmath} %can also use to align equations
+\usepackage{caption}
+%Allow acronyms, with the list beneath
+\usepackage[nolist,nohyperlinks]{acronym}
+\begin{acronym}
+\end{acronym}
+%Use natbib for bibliography
+\usepackage[square,super,comma,sort&compress]{natbib}
+%Style changes, indent all paragraphs, use the full page size, change the section heads, nice fractions, nice tables
+\usepackage{indentfirst}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage[small]{titlesec}
+\titlelabel{\thetitle. }
+\usepackage{nicefrac}
+\usepackage{booktabs}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+%Allows for me to non-justify some regions
+\usepackage{ragged2e}
+
+% Another package for doing title of assignment --> got it from Joel
+%\usepackage{titlesec}
+%\titleformat{\subsection}[runin]
+%{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+%\titleformat{\subsubsection}[runin]
+%{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\usepackage{pdflscape}
+\usepackage{enumitem}% http://ctan.org/pkg/enumitem
+\usepackage{adjustbox}
+
+
+
+\begin{document}
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%	HEADING SECTIONS
+
+\textsc{\LARGE McMaster University}\\[1.5cm] % Name of your university/college
+\textsc{\Large MECHTRON 4TB6A}\\[0.5cm] % Major heading such as course name
+\textsc{\large Mechatronics \& Software Engineering Capstone}\\[0.5cm] % Minor heading such as course title
+
+%	TITLE SECTION
+\vspace{1cm}
+\HRule \\[0.2cm]
+{ \Large \vspace{0.25cm}  \textsc{  \LARGE Team Contract} \vspace{0.3cm} }  % Title of your document
+\HRule \vspace{1cm}
+
+\textsc{\LARGE Health Mate - Pill Dispenser}
+ 
+ \begin{figure}[h]
+  \centering
+  \includegraphics[width=.4\linewidth]{ApexEngineering.png}
+\end{figure}
+ \vspace{1cm}
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{c c c}
+\toprule
+\textbf{Name} & \textbf{Student Number} & \textbf{McMaster Email}         \\ \midrule
+Justin Ballaro & 400015482 & ballaroj@mcmaster.ca \\
+Joel Bates & 001420696 & batesjj@mcmaster.ca \\
+Brodie Bresette & 400029059 & bresettb@mcmaster.ca \\
+Nicholas D'Angelo & 400018631 &  dangelon@mcmaster.ca  \\
+Daniel Pietrangelo & 400010287 &  pietrand@mcmaster.ca \\
+  \bottomrule
+\end{tabular}
+\label{Tab:HU}
+\end{table}
+
+%	DATE SECTION
+\vfill
+{\large Sunday, November 27, 2020}\\[3cm] % Date, change the \today to a set date if you want to be precise
+ % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\pagebreak
+
+With signatures from all members of Apex Automation, the team guarantees to deliver demonstrate a prototype with the following features at the final presentation:
+
+\begin{itemize}
+    \item Dispensing of different pills from designated pill containers using designed dispensing  mechanism at scheduled dispensing times/intervals.
+    \item Creating pill dispensing schedules using designed online portal that will upload said schedule to the device.
+    \item Device will emit audible reminders when pill(s) have not been retrieved after a set amount of time that will be determined at a later date.
+    \item Interactive device UI that will be displayed on onboard device LCD. This UI will display device information, settings and progress updates during the dispensing process. The UI will be interacted with onboard device buttons.
+    \item Collect the appropriate sensor data in order to keep adherence statistics and statistics about the device. This data should be accessible to the user through the online portal. 
+\end{itemize}
+
+Signed, 
+
+The Apex Team
+
+\end{document}
