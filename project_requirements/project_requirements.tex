@@ -1,3 +1,5 @@
+% The following file houses the System Requirements for Apex Automation's Pill Dispenser. All intellectual property belongs to the authors denoted on the document.
+
 %Usually an article, 12pt font, with a seperate title page
 \documentclass[12pt,titlepage]{article}
 %Ability to include figures easily, and eps files
@@ -117,13 +119,17 @@ Daniel Pietrangelo & 400010287 &  pietrand@mcmaster.ca \\
  \textbf{Revision Comments}\\
  \hline \centering
  0 & \centering
- 11/1/2020 & 
+ 1/11/2020 & 
  Justin Ballaro \newline
 Joel Bates \newline
 Brodie Bresette \newline
 Nicholas D'Angelo \newline
 Daniel Pietrangelo &
 Inital Revision \\
+\hline
+\centering 1 & \centering
+ 6/1/2020 & 
+ Justin Ballaro  &  Updated to match new blister pack scope.  \\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -138,18 +144,16 @@ This document is a detailed overview of the system requirements for the Health M
 
 \section{System Overview}
 \subsection{Purpose}
-The medication taken by an individual is only as effective as the abidance by the patient to take the prescribed medication at the times designated. The purpose of this project is to develop an integrated hardware and software system that dispenses a person's daily medication based on a two week schedule that is decided by a health care professional. The system will also provide an online portal for the patient and their respective health professionals to gain a new in depth overview of the patient's health. This portal will allow the respective healthcare professionals to upload the patients medication schedule. It will also display the statistics stored from the device.
+The medication taken by an individual is only as effective as the abidance by the patient to take the prescribed medication at the times designated. The purpose of this project is to develop an integrated hardware and software system that dispenses a user's daily medication from a pharmacy issued pill blister pack (BPK). Once a BPK is inserted into the device, the system will provide real time alarms/reminders when it is time for the user to take their medication. The system will also dispense the user's medication in such a manor as to make it easy to retrieve and ingest. Once a scheduled dose has been taken/missed the system will record adherence data. This data will be stored remotely and shared with the user's caregivers and healthcare professionals.
 
 
 \subsection{Scope}
 This project's scope consists of four main components. Each component plays an integral role in the overall system. A general overview of each component can be found below:
 \begin{enumerate}
-    \item System for dispensing a pill from a storage container (Silo)  to a designated area.
-    \item Embedded control system for initiating dispensing and collecting data statistics.
-    \begin{itemize}
-        \item The control system shall take action based on given schedule and type of medication.
-    \end{itemize}
-    \item Secure portal for creating, editing and uploading schedule to device along with viewing patient statistics.
+\item System for insertion, holding and removal of blister packs.
+    \item System for dispensing medication from individual ``blisters.''
+    \item Embedded control system that initiates dispensing, reads manual commands, collects data and uploads it to a database.
+    \item Secure portal for viewing user adherence data.
     \item Public web platform to host patient and product educational information.
     \begin{itemize}
         \item Note: Any content creation in terms of marketing for the public facing website is out of the scope of this project. 
@@ -160,7 +164,7 @@ This project's scope consists of four main components. Each component plays an i
 \subsection{Context Diagram}
  \begin{figure}[h]
   \centering
-  \includegraphics[width=.8\linewidth]{ContextDiagram.png}
+  \includegraphics[width=.8\linewidth]{ContextDiagram.jpg}
   \caption{Context Diagram}
 \end{figure}
 
@@ -176,15 +180,15 @@ This project's scope consists of four main components. Each component plays an i
  \hline 
 Pill Collected & Sensor detecting if the pill was taken from the dispenser. & N/A\\
  \hline
- Pill Dispensed & Tracks what/how many pills are physically dispensed by the system. Determines if pills are stuck or the wrong amount has been released.  & N/A\\
+ Pill Dispensed & Tracks when pills are physically dispensed by the system. Determines if pills are stuck.  & N/A\\
  \hline
  Manual Dispense Request & Button/command used to manually dispense medication. & bool \\
+ \hline
+  Blister Pack Seated & Keeps track of whether or not a blister pack is within the device. & bool \\
  \hline
 Date and Time & Needed to follow medication schedule. & dd:mm:yy hh:mm:ss\\
  \hline
 Adherence & Data collected on taken/missed pills. & json string\\
- \hline
- Medication Schedule & Medication schedule based on pharmacist input. & json string\\
  \hline
 User Inputs & All potential user inputs (i.e. settings menu, additional buttons). Further detail  in future revisions. & N/A\\
  \hline
@@ -204,13 +208,11 @@ User Inputs & All potential user inputs (i.e. settings menu, additional buttons)
  \hline
  \textbf{Name} & \textbf{Description} & \textbf{Units}\\
  \hline 
-Dispensing Schedule & On-board schedule of when pills will be dispensed. & json string \\
- \hline
-Prescription Silo \# & Input by the pharmacist when filling the device. Silo number will be set for each prescription. & int \\
+Dispensing Schedule & On-board schedule of when pills will be dispensed (default or user inputted times). & json string \\
  \hline
  Audible/Visual Alarm & Cue for user to take medication. & bool \\
  \hline
- Dispensing Mechanism & Dispenses medication from appropriate silo when scheduled. & bool\\
+ Dispensing Mechanism & Dispenses medication from appropriate blister when scheduled. & N/A\\
  \hline
 \end{tabular}
 \end{adjustbox}
@@ -227,9 +229,11 @@ Prescription Silo \# & Input by the pharmacist when filling the device. Silo num
  \hline
  \textbf{Name} & \textbf{Description} & \textbf{Units}\\
  \hline 
- Silo Height and Width & The dimensions of each individual silo & cm\\
- \hline
  Pill Dispenser Height and Width & The overall size of the Pill Dispensing machine & cm\\
+ \hline
+  Stroke of Dispensing Actuator & How far the dispensing system pushes to dispense pills. & cm\\
+ \hline
+   Dispensing Action & When the device dispenses medication. & bool\\
  \hline
 \end{tabular}
 \end{adjustbox}
@@ -242,8 +246,8 @@ Prescription Silo \# & Input by the pharmacist when filling the device. Silo num
 \subsection{Behaviour Overview}
 \vspace{-.5cm}
 \begin{align*}
-    PillDispenser &= f(Date/Time, DispensingSchedule, ManualRequests, Pill Collected, \\ & \ \ \ \ \ \ Pill Dispensed, UserInputs) \\ \\
-    WebPlatform &= f(MedicationSchedule, AdherenceStatistics, LoginInformation, Design) %needs some work
+    PillDispenser &= f(Date/Time, DispensingSchedule, ManualRequests, Pill Collected, \\ & \ \ \ \ \ \ Pill Dispensed, UserInputs, SeatedBPK) \\ \\
+    WebPlatform &= f(MedicationSchedule, AdherenceStatistics, LoginInformation) %needs some work
 \end{align*}
 Note: A function table for the web platform will be provided once the project is farther along in progress. 
 
@@ -302,19 +306,26 @@ Note: A function table for the web platform will be provided once the project is
 \begin{tabular}{|p{0.5\textwidth}|p{0.5\textwidth}|}
  \hline
  \textbf{Required Behaviour} & \textbf{Rationale} \\
- \hline 
- The system should dispense the correct number of pills when required. & 
-  If not enough pills are dispensed, the client will not adhere to the given schedule. If too many pills are dispensed, the client can face serious health complications. \\
  \hline
- The system should dispense the correct pills at the correct time or time period based on a given schedule.
+ The system should know that the blister package is inserted and in a safe state before any dispensing mechanism occur.  & The system must know that a blister is inserted and seated correctly so that pills my be dispensed accurately, and damage to the machine may be avoided.\\
+ \hline 
+ The system should dispense the correct blister at the correct time or time period based on a given schedule.
  \begin{itemize}
-     \item The system shall store the given schedule locally after it is uploaded to the device.
+     \item The system shall store the given schedule locally after it is uploaded/inputted into the device.
  \end{itemize} &
 
- Dispensing the incorrect pill at a time not defined by the schedule can cause confusion for the user and potential health complications.\\
+ Dispensing the incorrect blister at a time not defined by the schedule can cause confusion for the user and potential health complications.\\
  \hline
- The system should know what pill is being dispensed. &
+ The system should notify the user when it is time to take their medication in accordance with the programmed schedule.
+   &  An audible and visual alarm is necessary to notify the user when it is time to take their medication. These reminders are necessary to aid to user in pill adherence and to notify them when it is time to interact with the device.
+ \\
+ \hline
+ The system should know what blister is being dispensed. &
  The system should store this detail for use in adherence statistics. This should also allow the system to keep track of dispensing statistics.\\
+  \hline
+ The system should provide an easy means for the end user to retrieve their pills once they have been dispensed.
+  & Once pills are dispensed it is critical that pills are able to be retrieved by users easily and reliably so they may adhere to their medication schedule regardless of physical capacity.
+ \\
  \hline
  The system must collect and store data on pill schedule adherence. & 
  Having these statistics available for the end user and their health professional will give new insight to the clients health.\\
@@ -324,6 +335,9 @@ Note: A function table for the web platform will be provided once the project is
  \hline
  The system must not damage any pills in the dispensing process. &
  If a pill is damaged in any step of the dispensing process, it becomes unusable and the patients medication schedule is put in jeopardy.\\
+ \hline
+  The system must notify the user when the inserted blister pack is nearly empty and entirely empty. & This behaviour is necessary as to let the user know that it is time to replace the currently loaded blister pack with a new one.
+ \\
  \hline
  The user must be able to interact with the system through a web interface. &
  All system data and statistics will be displayed through this interface. This will also be the median used to upload the patients pill schedule. \\
@@ -338,14 +352,14 @@ Note: A function table for the web platform will be provided once the project is
 \subsection{Performance Requirements}
 \subsubsection{Pill Dispensing Control}
 \begin{itemize}
-    \item The dispenser will release the scheduled tablets at the scheduled time. 
-    \item The dispenser will keep track of how many tablets of each medicine remain in the dispenser.
-    \item The dispenser will only allow the user to take the tablet if safe to do so.
-    \item Verify that a tablet was dispensed when it was scheduled to.
+    \item The dispenser will release the scheduled blister contents at the scheduled time. 
+    \item The dispenser will keep track of how many blisters are yet to be dispensed.
+    \item The dispenser will only allow the user to take the medication if safe to do so.
+    \item Verify that a blister was dispensed when it was scheduled to.
 \end{itemize}
 \subsubsection{Clock Requirement}
 \begin{itemize}
-    \item Keep an accurate clock to ensure the tablets are dispensed as scheduled.
+    \item Keep an accurate clock to ensure the blisters are dispensed as scheduled.
     \item Be able to keep accurate clock through power outage.
 \end{itemize}
 \subsubsection{Software Requirement}
@@ -356,7 +370,9 @@ Note: A function table for the web platform will be provided once the project is
 \end{itemize}
 
 \subsection{Normal Operation}
-Please note: The normal operation captured below would be encountered \textbf{after} a refill of the pill silos has been done. The refill procedure is not encapsulated. It also assumes the setup of the internal clock of the device has been done and a medication schedule has been uploaded to the system.
+%Please note: The normal operation captured below would be encountered \textbf{after} a refill of the pill silos has been done. The refill procedure is not encapsulated. It also assumes the setup of the internal clock of the device has been done and a medication schedule has been uploaded to the system.%
+
+Please note: The normal operation captured below would be encountered \textbf{after} a blister pack has been loaded into the device. The refill procedure is not encapsulated. It also assumes the setup of the internal clock of the device has been done and a medication schedule has been uploaded/inputted into the system.
 
 \begin{itemize}[leftmargin=*]
     \item The system is powered ON.
@@ -368,7 +384,7 @@ Please note: The normal operation captured below would be encountered \textbf{af
     \item Self system diagnosis and system preparation.
 \end{itemize}
 \begin{itemize}[label={}]
-\item The system will begin a system diagnosis to ensure there are no issues present with the dispensing mechanism. This check will also ensure the micro-controller is working properly. At this step, the device will also take inventory of all pill containers present and analyze the users pill schedule to prepare for either the waiting period or dispensing time.
+\item The system will begin a system diagnosis to ensure there are no issues present with the dispensing mechanism and that the blister pack is seated properly. This check will also ensure the micro-controller is functioning as intended. At this step, the device will analyze the users medication schedule to prepare for either the waiting period or dispensing time.
 \end{itemize}
 \begin{itemize}[leftmargin=*]
     \item Schedule dispensing time has not been reached (holding period).
@@ -380,7 +396,7 @@ Please note: The normal operation captured below would be encountered \textbf{af
     \item Schedule dispensing time has been reached (dispense).
 \end{itemize}
 \begin{itemize}[label={}]
-\item At this point, the device begins the dispensing process. The device reads what pills should be dispensed from the stored schedule and dispenses those pills using the onboard dispensing mechanism. After all dispensing is complete, the device returns to the holding state.
+\item At this point, the device begins the dispensing process. The device reads what blister should be dispensed from the stored schedule and dispenses those pills using the onboard dispensing mechanism. After all dispensing is complete, the device returns to the holding state.
 \end{itemize}
 
 \subsection{Undesired Event Handling}
@@ -389,8 +405,8 @@ The safety of the pill dispensing machine is of critical importance. As such, th
 The system should be able to determine if it has jammed, attempt to fix itself, and if unsuccessful, inform the user how to return the device to a functioning state.
 \subsubsection{Power Outage}
 The system should be able to account for a power outage, returning to its previous state, and resuming operation once re-powered.
-\subsubsection{Release of Too Many Pills}
-The system should be able to detect it has released too many of a certain pill, inform the user an error has occurred and advise next-steps for that specific pill.
+\subsubsection{Failed Alarm/Reminder}
+The system should be able to detect if the alarming mechanisms are malfunctioning and should inform the user how to return the device to a functioning state.
 \subsubsection{Data Transfer Error}
 The system should be able to determine whether a data transfer error occurred when being programmed by the pharmacist, inform the programmer of the error and prompt the pharmacist to retry the data download.
 \subsubsection{Pill Not Taken}
@@ -398,11 +414,8 @@ The system should be able to detect whether a pill was not taken by the user and
 
 \section{Requirements Likely to Change}
 \begin{itemize}
-    \item The number of silos per device.
-    \item The number of silo sets per device
     \item Ability to manually release pills earlier than scheduled.
-    \item Access to silos by the end-user.
-    \item The variety of pill sizes available to be dispensed.
+    \item The variety of blister pack sizes available to be dispensed.
     \item The inclusion of pill instructions.
     \item End-user's ability to change the on-device clock.
     \item How the device will be setup.
@@ -411,14 +424,15 @@ The system should be able to detect whether a pill was not taken by the user and
     \item The level of detail included in preparing the pill dispensing schedule.
     \item Notifications to loved ones or care-taker.
     \item The upper-limit time required to successfully dispense a pill.
+    \item Mechanism for data upload and download from database system.
 \end{itemize}
 
 \section{Requirements Unlikely to Change}
 \begin{itemize}
     \item 99.9\% effectiveness
-    \item Ability to dispense the correct number of pills when required.
+    \item Ability to dispense the correct blister of pills when required.
     \item Ability to use a schedule for the release of pills.
-    \item Ability to know what type of pill is being dispensed.
+    \item Ability to know what blister is being dispensed.
     \item Ability to collect data on pill adherence.
     \item Ability to transfer data between the device and scheduling portal securely.
     \item Easy to use software for medical professionals.
