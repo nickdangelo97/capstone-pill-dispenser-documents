@@ -178,19 +178,21 @@ This project's scope consists of four main components. Each component plays an i
  \hline
  \textbf{Name} & \textbf{Description} & \textbf{Units}\\
  \hline 
-Pill Collected & Sensor detecting if the pill was taken from the dispenser. & N/A\\
+Pill Collected & Whether or not the medication has been taken from the dispenser. & bool\\
  \hline
- Pill Dispensed & Tracks when pills are physically dispensed by the system. Determines if pills are stuck.  & N/A\\
+Pill Dispensed & Tracks when pills are physically dispensed. True if pills make it to the collection area  & bool\\
  \hline
- Manual Dispense Request & Button/command used to manually dispense medication. & bool \\
+Manual Dispense Request & Button/command used to manually dispense medication. & bool \\
+  \hline
+Dispensing Schedule & Schedule of when pills will be dispensed (default or user inputted times). & json string \\
  \hline
-  Blister Pack Seated & Keeps track of whether or not a blister pack is within the device. & bool \\
+  Blister Pack Seated & Keeps track of whether or not a blister pack is within the device and seated properly. & bool \\
  \hline
 Date and Time & Needed to follow medication schedule. & dd:mm:yy hh:mm:ss\\
  \hline
-Adherence & Data collected on taken/missed pills. & json string\\
- \hline
 User Inputs & All potential user inputs (i.e. settings menu, additional buttons). Further detail  in future revisions. & N/A\\
+ \hline
+ Login Information & User information needed to access database containing adherence data. & json string \\
  \hline
 
 \end{tabular}
@@ -199,7 +201,10 @@ User Inputs & All potential user inputs (i.e. settings menu, additional buttons)
 \caption{Monitored variables.}
 \end{table}
 
+\pagebreak
+
 \subsection{Controlled Variables}
+
 \begin{table}[ht!]
 \begin{center}
 \begin{adjustbox}{max width=\textwidth}
@@ -208,11 +213,13 @@ User Inputs & All potential user inputs (i.e. settings menu, additional buttons)
  \hline
  \textbf{Name} & \textbf{Description} & \textbf{Units}\\
  \hline 
-Dispensing Schedule & On-board schedule of when pills will be dispensed (default or user inputted times). & json string \\
+ Adherence Statistics & Data collected on taken/missed pills. & json string\\
  \hline
  Audible/Visual Alarm & Cue for user to take medication. & bool \\
  \hline
  Dispensing Mechanism & Dispenses medication from appropriate blister when scheduled. & N/A\\
+ \hline
+ Blister Pack Seated Notifier & Lets user know if the blister package has been installed properly. & bool\\
  \hline
 \end{tabular}
 \end{adjustbox}
@@ -246,8 +253,8 @@ Dispensing Schedule & On-board schedule of when pills will be dispensed (default
 \subsection{Behaviour Overview}
 \vspace{-.5cm}
 \begin{align*}
-    PillDispenser &= f(Date/Time, DispensingSchedule, ManualRequests, Pill Collected, \\ & \ \ \ \ \ \ Pill Dispensed, UserInputs, SeatedBPK) \\ \\
-    WebPlatform &= f(MedicationSchedule, AdherenceStatistics, LoginInformation) %needs some work
+    PillDispenser &= f(Date/Time, DispensingSchedule, ManualDispenseRequests, \\ &  PillCollected, PillDispensed, UserInputs, BlisterPackSeated) \\ \\
+    WebPlatform &= f(DispensingSchedule, AdherenceStatistics, LoginInformation) %needs some work
 \end{align*}
 Note: A function table for the web platform will be provided once the project is farther along in progress. 
 
