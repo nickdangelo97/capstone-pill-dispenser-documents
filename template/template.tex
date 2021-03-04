@@ -1,0 +1,30 @@
+%Usually an article, 12pt font, with a separate title page
+\documentclass[12pt]{article}
+\usepackage{preamble}
+
+
+\begin{document}
+
+% Edit title page in the titlepage.tex file.
+\input{titlepage.tex} 
+\pagebreak
+% header and footer settings
+\pagestyle{fancy} \fancyhf{}
+\lhead{\fontsize{10pt}{10pt}\selectfont System Requirements} \rhead{\fontsize{10pt}{10pt}\selectfont Revision \rev} \cfoot{\thepage}
+
+% Edit table of revisions in tableofrevisions.tex
+\pagenumbering{roman}
+\input{tableofrevisions.tex}
+\pagebreak
+\tableofcontents
+\listoffigures
+\listoftables
+\pagebreak
+\pagenumbering{arabic}
+
+%----------Begin adding text here.----------
+\section{First Section}
+Text starts here.
+
+\end{document}
+

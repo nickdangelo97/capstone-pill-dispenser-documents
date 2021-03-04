@@ -1,0 +1,50 @@
+\ProvidesPackage{preamble}
+
+%-----------------------PACKAGES BEGIN------------------------------
+%Ability to include figures easily, and eps files
+\RequirePackage{graphicx}
+\RequirePackage{grffile}
+\RequirePackage{epstopdf}
+\RequirePackage{epsfig}
+\RequirePackage[euler]{textgreek}
+%Hide links on autoref, and call each piece a section
+\RequirePackage[hidelinks]{hyperref}
+\def\subsectionautorefname{Section}
+\def\subsubsectionautorefname{Section}
+%Allows symbols, captions, math
+% \RequirePackage{amssymb}
+\RequirePackage{amsmath} %can also use to align equations
+\RequirePackage{caption}
+%Allow acronyms, with the list beneath
+\RequirePackage[nolist,nohyperlinks]{acronym}
+\begin{acronym}
+\end{acronym}
+%Use natbib for bibliography
+\RequirePackage[square,super,comma,sort&compress]{natbib}
+%Style changes, indent all paragraphs, use the full page size, change the section heads, nice fractions, nice tables
+\RequirePackage{indentfirst}
+\RequirePackage[margin=1in]{geometry}
+\RequirePackage{setspace}
+\RequirePackage[small]{titlesec}
+\titlelabel{\thetitle. }
+\RequirePackage{nicefrac}
+\RequirePackage{booktabs}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+%Allows for me to non-justify some regions
+\RequirePackage{ragged2e}
+%\RequirePackage{titlesec}
+%\titleformat{\subsection}[runin]
+%{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+%\titleformat{\subsubsection}[runin]
+%{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\RequirePackage{pdflscape}
+\RequirePackage{enumitem}% http://ctan.org/pkg/enumitem
+\RequirePackage{adjustbox}
+\RequirePackage{float}
+\RequirePackage{tabularx}
+\RequirePackage{ltablex}
+%STYLES
+\RequirePackage{fancyhdr}
+\RequirePackage{multirow}
+\RequirePackage{longtable}
+%-----------------------PACKAGES END------------------------------

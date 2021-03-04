@@ -1,458 +1,901 @@
 % The following file houses the System Requirements for Apex Automation's Pill Dispenser. All intellectual property belongs to the authors denoted on the document.
 
-%Usually an article, 12pt font, with a seperate title page
-\documentclass[12pt,titlepage]{article}
-%Ability to include figures easily, and eps files
-\usepackage{graphicx}
-\usepackage{grffile}
-\usepackage{epstopdf}
-\usepackage{epsfig}
-\usepackage[euler]{textgreek}
-%Hide links on autoref, and call each piece a section
-\usepackage[hidelinks]{hyperref}
-\def\subsectionautorefname{Section}
-\def\subsubsectionautorefname{Section}
-%Allows symbols, captions, math
-% \usepackage{amssymb}
-\usepackage{amsmath} %can also use to align equations
+%Usually an article, 12pt font, with a separate title page
+\documentclass[12pt]{article}
+\usepackage{preamble}
 \usepackage{caption}
-%Allow acronyms, with the list beneath
-\usepackage[nolist,nohyperlinks]{acronym}
-\begin{acronym}
-\end{acronym}
-%Use natbib for bibliography
-\usepackage[square,super,comma,sort&compress]{natbib}
-%Style changes, indent all paragraphs, use the full page size, change the section heads, nice fractions, nice tables
-\usepackage{indentfirst}
-\usepackage[margin=1in]{geometry}
-\usepackage{setspace}
-\onehalfspacing
-\usepackage[small]{titlesec}
-\titlelabel{\thetitle. }
-\usepackage{nicefrac}
-\usepackage{booktabs}
-\newcommand\tab[1][1cm]{\hspace*{#1}}
-%Allows for me to non-justify some regions
-\usepackage{ragged2e}
-
-% Another package for doing title of assignment --> got it from Joel
-%\usepackage{titlesec}
-%\titleformat{\subsection}[runin]
-%{\normalfont\large\bfseries}{\thesubsection}{1em}{}
-%\titleformat{\subsubsection}[runin]
-%{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
-\usepackage{pdflscape}
-\usepackage{enumitem}% http://ctan.org/pkg/enumitem
-\usepackage{adjustbox}
-
+\captionsetup{skip=0pt}
 
 \begin{document}
 
-\begin{titlepage}
-
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
-
-\center % Center everything on the page
- 
-%	HEADING SECTIONS
-
-\textsc{\LARGE McMaster University}\\[1.5cm] % Name of your university/college
-\textsc{\Large MECHTRON 4TB6A}\\[0.5cm] % Major heading such as course name
-\textsc{\large Mechatronics \& Software Engineering Capstone}\\[0.5cm] % Minor heading such as course title
-
-%	TITLE SECTION
-\vspace{1cm}
-\HRule \\[0.2cm]
-{ \Large \vspace{0.25cm}  \textsc{  \LARGE System Requirements} \vspace{0.3cm} }  % Title of your document
-\HRule \vspace{1cm}
-
-\textsc{\LARGE Health Mate - Pill Dispenser}
- 
- \begin{figure}[h]
-  \centering
-  \includegraphics[width=.4\linewidth]{../ApexEngineering.png}
-\end{figure}
- \vspace{1cm}
- 
-%----------------------------------------------------------------------------------------
-%	AUTHOR SECTION
-%----------------------------------------------------------------------------------------
-
-\begin{table}[ht!]
-\centering
-\begin{tabular}{c c c}
-\toprule
-\textbf{Name} & \textbf{Student Number} & \textbf{McMaster Email}         \\ \midrule
-Justin Ballaro & 400015482 & ballaroj@mcmaster.ca \\
-Joel Bates & 001420696 & batesjj@mcmaster.ca \\
-Brodie Bresette & 400029059 & bresettb@mcmaster.ca \\
-Nicholas D'Angelo & 400018631 &  dangelon@mcmaster.ca  \\
-Daniel Pietrangelo & 400010287 &  pietrand@mcmaster.ca \\
-  \bottomrule
-\end{tabular}
-\label{Tab:HU}
-\end{table}
-
-%	DATE SECTION
-\vfill
-{\large Sunday, November 1, 2020}\\[3cm] % Date, change the \today to a set date if you want to be precise
- % Fill the rest of the page with whitespace
-
-\end{titlepage}
-
+% Edit title page in the titlepage.tex file.
+\input{titlepage.tex} 
 \pagebreak
+% header and footer settings
+\pagestyle{fancy} \fancyhf{}
+\lhead{\fontsize{10pt}{10pt}\selectfont System Requirements} \rhead{\fontsize{10pt}{10pt}\selectfont Revision \rev} \cfoot{\thepage}
+
+% Edit table of revisions in tableofrevisions.tex
 \pagenumbering{roman}
+\input{tableofrevisions.tex}
+\pagebreak
 \tableofcontents
+\listoffigures
+\listoftables
 \pagebreak
 \pagenumbering{arabic}
 
-\section{Table of Revisions}
+%----------Begin adding text here.----------
 
-\begin{table}[ht!]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\small
-\begin{tabular}{|p{0.1\textwidth}|p{0.1\textwidth}|p{0.2\textwidth}|p{0.4\textwidth}|}
+\section{Introduction}
+\subsection{Document Purpose}
+The purpose of this document is to define the minimum functional requirements for the Healthmate pill dispenser system. Meeting these requirements is the driving force behind system design and is a key success criteria for the project. These requirements are referenced in the System Design and Validation \& Verification documents.
+
+
+\subsection{Project Purpose \& Scope}
+The medication taken by an individual is only as effective as the abidance by the patient to take the prescribed medication at the times designated. The purpose of this project is to develop an integrated hardware and software system to improve the medication adherence for users who receive their prescriptions in sachet/pouch style packaging. This device will focus on dispensing PACMED pouches developed by McKesson Corporation. \par
+The system to be implemented will provide real time alarms/reminders when it is time for the user to take their medication. The system will also dispense the user's medication in such a manor as to make it easy to retrieve and ingest. Once a scheduled dose has been taken/missed the system will record adherence data. This data will be stored locally on the device.\par
+This project's scope consists of four main components. A general overview of each component can be found below:
+\begin{enumerate}
+    \item System to insert strip packaged medication into the device.
+    \item System for dispensing individual packages from a strip package.
+    \item Embedded control system that initiates dispensing, reads user interactions, and collects data.
+    \item User interface for user information and settings control.
+\end{enumerate}
+
+
+\subsection{Operational Overview}
+A individual will insert their PACMED strip package into the device, aligning the first pouch with an alignment groove. After insertion they will be prompted to set their preferred dispensing times within predefined ranges for morning, lunch, supper and bedtime doses. When it is time for a scheduled dose an audible alarm will activate. Upon alarm acknowledgement, the device will cut open and dispense the required pouch/pouches, and the user can freely remove their medication from the device. Under normal operation, dispensing events will continue to occur at the specified times until all pouches have been dispensed from the device. \par
+The user may interact with an interface on the device. Through this interface they will be able to modify the dispensing schedule, initiate manual dispense requests and view adherence data.
+
+\pagebreak
+
+\section{Definitions \& Naming Conventions}
+
+\subsection{General Definitions}
+\begin{table}[htb!]
+\begin{center} \begin{adjustbox}{max width=\textwidth}\small
+\begin{tabular}{|p{0.15\textwidth}|p{0.75\textwidth}|}
  \hline
- \textbf{Revision } & \textbf{Date} &
- \textbf{Authors} &
- \textbf{Revision Comments}\\
- \hline \centering
- 0 & \centering
- 1/11/2020 & 
- Justin Ballaro \newline
-Joel Bates \newline
-Brodie Bresette \newline
-Nicholas D'Angelo \newline
-Daniel Pietrangelo &
-Inital Revision \\
-\hline
-\centering 1 & \centering
- 6/1/2020 & 
- Justin Ballaro  &  Updated to match new blister pack scope.  \\
-\hline
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Table of Revisions}
+ \textbf{Word} & \textbf{Definition}\\
+ \hline 
+ Healthmate & The name of the dispensing device. Any reference to ``Healthmate'' is referring to the entire pill dispensing system.   \\ \hline
+ PACMED Strip Package & Medication storage/adherence product sold my McKesson Corporation. It is a box containing a filled strip pack (see strip pack below). \\ \hline
+ Strip Pack & A series of filled medication pouches attached by the seam in a single continuous strip. \\ \hline
+ Pouch & An sealed package containing a single dose of medication. These pouches have the date and either MORNING, LUNCH, SUPPER or BEDTIME written on them, indicating when the medication inside should be consumed. \\ \hline
+ Sachet &  Another word to describe a pouch (see pouch above). \\ \hline
+ Dispense &  The action of cutting open open a pouch and making it available for collection. \\ \hline
+ Collection & The end user removing an opened pouch from the device. \\ \hline
+ Adherence Data & Data indicating the date and time when a pouch has been dispense, as well as, the date and time when the pouch is collected. \\ \hline
+\end{tabular}\end{adjustbox}\end{center}\caption{General definitions.}
+\end{table}
+
+
+\subsection{Naming Conventions}
+\begin{table}[htb!] \begin{center} \begin{adjustbox}{max width=\textwidth} \small
+\begin{tabular}{|p{0.15\textwidth}|p{0.3\textwidth}|}
+ \hline
+ \textbf{Prefix} & \textbf{Description}\\
+ \hline 
+ m\_ & Monitored variable.\\ \hline
+ c\_ & Controlled variable.\\ \hline
+ k\_ & Constant variable.\\ \hline
+ FR\# & Functional requirement.\\ \hline
+ NFR\# & Non-functional requirement.\\ \hline
+\end{tabular} \end{adjustbox} \end{center}
+\caption{Naming conventions.}
 \end{table}
 
 \pagebreak
 
-\section{Introduction}
-This document is a detailed overview of the system requirements for the Health Mate - Pill Dispenser. As the project progresses, this systems requirements overview will be updated accordingly.
-
-\section{System Overview}
-\subsection{Purpose}
-The medication taken by an individual is only as effective as the abidance by the patient to take the prescribed medication at the times designated. The purpose of this project is to develop an integrated hardware and software system that dispenses a user's daily medication from a pharmacy issued pill blister pack (BPK). Once a BPK is inserted into the device, the system will provide real time alarms/reminders when it is time for the user to take their medication. The system will also dispense the user's medication in such a manor as to make it easy to retrieve and ingest. Once a scheduled dose has been taken/missed the system will record adherence data. This data will be stored remotely and shared with the user's caregivers and healthcare professionals.
-
-
-\subsection{Scope}
-This project's scope consists of four main components. Each component plays an integral role in the overall system. A general overview of each component can be found below:
-\begin{enumerate}
-\item System for insertion, holding and removal of blister packs.
-    \item System for dispensing medication from individual ``blisters.''
-    \item Embedded control system that initiates dispensing, reads manual commands, collects data and uploads it to a database.
-    \item Secure portal for viewing user adherence data.
-    \item Public web platform to host patient and product educational information.
-    \begin{itemize}
-        \item Note: Any content creation in terms of marketing for the public facing website is out of the scope of this project. 
-    \end{itemize}
-\end{enumerate}
-
-\pagebreak
-\subsection{Context Diagram}
- \begin{figure}[h]
-  \centering
-  \includegraphics[width=.8\linewidth]{ContextDiagram.jpg}
-  \caption{Context Diagram}
-\end{figure}
+\subsection{Constants} 
+\begin{table}[htb!] \begin{center} \begin{adjustbox}{max width=\textwidth}
+\small
+\begin{tabular}{|p{0.3\textwidth}|p{0.4\textwidth}|p{0.10\textwidth}|p{0.10\textwidth}|}
+ \hline
+ \textbf{Name} & \textbf{Description} & \textbf{Value} & \textbf{Units}\\
+ \hline 
+ k\_DispenserLength & The length of Healthmate. & TBD & cm\\
+ \hline
+ k\_DispenserWidth & The width of Healthmate. & TBD & cm\\
+ \hline
+ k\_DispenserHeight & The height of Healthmate. & TBD & cm\\
+ \hline
+ k\_StripPackageLength & The length of the PACMED Strip Package. & 10.8 & cm\\
+ \hline
+ k\_StripPackageWidth & The width of the PACMED Strip Package. & 7.6 & cm\\
+ \hline
+ k\_StripPackageHeight & The height of the PACMED Strip Package. & 10.8 & cm\\
+ \hline
+ k\_PouchLength & The length of a single pouch. & 7.5 & cm\\
+ \hline
+ k\_PouchWidth & The width of a single pouch. & 7.0 & cm\\
+ \hline
+\end{tabular} \end{adjustbox} \end{center}
+\caption{Constant variables.}
+\end{table}
 
 
 \subsection{Monitored Variables}
-\begin{table}[ht!]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
+\begin{table}[htb!] \begin{center} \begin{adjustbox}{max width=\textwidth}
 \small
 \begin{tabular}{|p{0.3\textwidth}|p{0.5\textwidth}|p{0.10\textwidth}|}
  \hline
  \textbf{Name} & \textbf{Description} & \textbf{Units}\\
  \hline 
-Pill Collected & Whether or not the medication has been taken from the dispenser. & bool\\
+m\_PillCollected & Whether or not the medication has been taken from the dispenser. & bool\\
  \hline
-Pill Dispensed & Tracks when pills are physically dispensed. True if pills make it to the collection area  & bool\\
+m\_PillDispensed & Tracks when pills are physically dispensed. True if pills make it to the collection area  & bool\\
  \hline
-Manual Dispense Request & Button/command used to manually dispense medication. & bool \\
-  \hline
-Dispensing Schedule & Schedule of when pills will be dispensed (default or user inputted times). & json string \\
+m\_DispensingSchedule & Schedule of when pills will be dispensed (default or user inputted times). & json string \\
  \hline
-  Blister Pack Seated & Keeps track of whether or not a blister pack is within the device and seated properly. & bool \\
+m\_StripPackageSeated & Whether or not the strip package has been inserted and aligned correctly. & bool \\
  \hline
-Date and Time & Needed to follow medication schedule. & dd:mm:yy hh:mm:ss\\
+m\_DateTime & Needed to follow medication schedule. & dd:mm:yy hh:mm:ss\\
  \hline
-User Inputs & All potential user inputs (i.e. settings menu, additional buttons). Further detail  in future revisions. & N/A\\
+m\_UserInputs & Result of users interaction with the UI, could be manual dispense requests, schedule change, clock change, view adherence stats & N/A\\
  \hline
- Login Information & User information needed to access database containing adherence data. & json string \\
- \hline
-
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Monitored variables.}
+\end{tabular} \end{adjustbox} \end{center} 
+\caption{Monitored variables.} 
 \end{table}
 
 \pagebreak
 
 \subsection{Controlled Variables}
-
-\begin{table}[ht!]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\small
+\begin{table}[htb!] \begin{center} \begin{adjustbox}{max width=\textwidth} \small
 \begin{tabular}{|p{0.3\textwidth}|p{0.5\textwidth}|p{0.10\textwidth}|}
  \hline
  \textbf{Name} & \textbf{Description} & \textbf{Units}\\
  \hline 
- Adherence Statistics & Data collected on taken/missed pills. & json string\\
+ c\_AdherenceStatistics & Data collected on taken/missed pills. & json string\\
  \hline
- Audible/Visual Alarm & Cue for user to take medication. & bool \\
+ c\_AudioVisualAlarm & Cue for user to take medication. & bool \\
  \hline
- Dispensing Mechanism & Dispenses medication from appropriate blister when scheduled. & N/A\\
+ c\_DispensingMechanism & Dispenses the appropriate pouch/pouches when scheduled. & N/A \\
  \hline
- Blister Pack Seated Notifier & Lets user know if the blister package has been installed properly. & bool\\
+ c\_SeatedErrorNotifier & Lets user know if the strip package has not been inserted and aligned properly. & bool\\
  \hline
-\end{tabular}
-\end{adjustbox}
-\end{center}
+\end{tabular}\end{adjustbox} \end{center}
 \caption{Controlled variables}
 \end{table}
 
-\subsection{Constants}
-\begin{table}[ht!]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\small
-\begin{tabular}{|p{0.3\textwidth}|p{0.5\textwidth}|p{0.10\textwidth}|}
- \hline
- \textbf{Name} & \textbf{Description} & \textbf{Units}\\
- \hline 
- Pill Dispenser Height and Width & The overall size of the Pill Dispensing machine & cm\\
- \hline
-  Stroke of Dispensing Actuator & How far the dispensing system pushes to dispense pills. & cm\\
- \hline
-   Dispensing Action & When the device dispenses medication. & bool\\
- \hline
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Constant variables.}
-\end{table}
 
+\section{System Overview}
 
-\section{System Behaviour and Requirements}
-\subsection{Behaviour Overview}
-\vspace{-.5cm}
-\begin{align*}
-    PillDispenser &= f(Date/Time, DispensingSchedule, ManualDispenseRequests, \\ &  PillCollected, PillDispensed, UserInputs, BlisterPackSeated) \\ \\
-    WebPlatform &= f(DispensingSchedule, AdherenceStatistics, LoginInformation) %needs some work
-\end{align*}
-Note: A function table for the web platform will be provided once the project is farther along in progress. 
-
-\begin{table}[ht!]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\small
-\begin{tabular}{| c | c | c | c |}
-\hline
-  & \multicolumn{3}{c|}{\textit{Results}}\\
- \hline 
-  & \textbf{Dispense} & \textbf{} & \textbf{Notify}\\
- \textit{Conditions} & \textbf{Medication} & \textbf{Record data} & \textbf{User}\\
- \hline 
- Date/Time = DispensingSchedule & TRUE & TRUE & TRUE\\
- \hline
-  Date/Time != DispensingSchedule & FALSE & FALSE & FALSE\\
- \hline
-  ManualRequest & TRUE & TRUE & FALSE\\
- \hline
-  !ManualRequest & FALSE & FALSE & FALSE\\
-  \hline
-   PillCollected & FALSE & TRUE & FALSE\\
- \hline
-  !PillCollected & FALSE & TRUE & TRUE\\
- \hline
- PillDispensed & FALSE & TRUE & FALSE\\
- \hline
- !PillDispensed & FALSE & TRUE & TRUE\\
- \hline
-  UserInputs & X & X & X\\
- \hline
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Pill Dispenser Behaviour Table}
-\end{table}
-
-\pagebreak
-\subsection{Functional Decomposition}
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{FuncDecomp.png}
-    \caption{Functional Decomposition Diagram}
-    \label{fig:my_label}
+\subsection{Context Diagram}
+The following is a context diagram defining the boundaries between the system and the environment.
+ \begin{figure}[htp!]
+  \centering
+  \includegraphics[width=1\linewidth]{ContextDiagram.jpg}
+  \caption{Context Diagram}
 \end{figure}
 
 
-\pagebreak
+\subsection{Functional Decomposition}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{project_requirements/FuncDecomp.jpg}
+    \caption{Functional Decomposition Diagram}
+    \label{fig:my_label}
+\end{figure}
+%NEED TO ADD A DESCRIPTION TO FOLLOW UP ON THE FUNCTIONAL DECOMPISTION --> see AVCS example
+
+%\subsection{Assumptions \& Dependencies}
+%add some relevant assumptions --> ex. schedule will be provided, can be point form or labelled
+% not sure where the best place to put this is right now.
+
 \subsection{Required Behaviour Description}
 
-\begin{table}[ht!]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\small
-\begin{tabular}{|p{0.5\textwidth}|p{0.5\textwidth}|}
- \hline
- \textbf{Required Behaviour} & \textbf{Rationale} \\
- \hline
- The system should know that the blister package is inserted and in a safe state before any dispensing mechanism occur.  & The system must know that a blister is inserted and seated correctly so that pills my be dispensed accurately, and damage to the machine may be avoided.\\
- \hline 
- The system should dispense the correct blister at the correct time or time period based on a given schedule.
- \begin{itemize}
-     \item The system shall store the given schedule locally after it is uploaded/inputted into the device.
- \end{itemize} &
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.45\textwidth,height=.45\textheight,keepaspectratio]{project_requirements/FSM.png}
+    \caption{Finite State Machine}
+    \label{fig:my_label}
+\end{figure}
 
- Dispensing the incorrect blister at a time not defined by the schedule can cause confusion for the user and potential health complications.\\
+\begin{table}[H] \begin{center} \begin{adjustbox}{max width=\textwidth} \small
+\begin{tabular}{|p{0.52\textwidth}|p{0.52\textwidth}|}
  \hline
- The system should notify the user when it is time to take their medication in accordance with the programmed schedule.
-   &  An audible and visual alarm is necessary to notify the user when it is time to take their medication. These reminders are necessary to aid to user in pill adherence and to notify them when it is time to interact with the device.
- \\
+ \textbf{State} & \textbf{Description}\\
+ \hline 
+ Config & The device will configure and test all peripherals to ensure they are in working condition and the device can operate successfully. \\
+ 
  \hline
- The system should know what blister is being dispensed. &
- The system should store this detail for use in adherence statistics. This should also allow the system to keep track of dispensing statistics.\\
-  \hline
- The system should provide an easy means for the end user to retrieve their pills once they have been dispensed.
-  & Once pills are dispensed it is critical that pills are able to be retrieved by users easily and reliably so they may adhere to their medication schedule regardless of physical capacity.
- \\
+ Ready & This is a holding period. The device is waiting for the next scheduled dispense time. In this state, the user can change device settings, view current parameters and see the current RTC time. \\
+ 
  \hline
- The system must collect and store data on pill schedule adherence. & 
- Having these statistics available for the end user and their health professional will give new insight to the clients health.\\
+ Alarm & The device will emit visible and audible alarms to alert the user that their medication is ready to be dispensed. \\
  \hline
- The system should be safe and easy to operate for all users. &
- The device should not become an extra nuisance or unsafe for the health professional or end user. \\
+  Alarm Timeout & The alarm has either been acknowledged. \\
  \hline
- The system must not damage any pills in the dispensing process. &
- If a pill is damaged in any step of the dispensing process, it becomes unusable and the patients medication schedule is put in jeopardy.\\
+   Dispense & The device will initiate its internal mechanism to perform its dispensing action. \\
  \hline
-  The system must notify the user when the inserted blister pack is nearly empty and entirely empty. & This behaviour is necessary as to let the user know that it is time to replace the currently loaded blister pack with a new one.
- \\
+   Wait For Collection & This is a holding period. A sensor will polled to determine if/when the pouch is collected  \\
  \hline
- The user must be able to interact with the system through a web interface. &
- All system data and statistics will be displayed through this interface. This will also be the median used to upload the patients pill schedule. \\
+    Adherence Update & Timestamp the pouch collection/non-collection and store it internally for user reference \\
  \hline
  
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Behaviour Description Table}
+ 
+\end{tabular}\end{adjustbox} \end{center}
+\caption{Controlled variables}
 \end{table}
 
-\subsection{Performance Requirements}
-\subsubsection{Pill Dispensing Control}
+
+% On the fence about including an updated version of this table... maybe if we have the time.
+%\subsection{Behaviour Overview}  
+%\vspace{-.5cm}
+%\begin{align*}
+%    PillDispenser &= f(Date/Time, %DispensingSchedule, ManualDispenseRequests, \\ & % PillCollected, PillDispensed, UserInputs, %SachetRollSeated)
+%\end{align*}
+%
+%\begin{table}[ht!]
+%\begin{center}
+%\begin{adjustbox}{max width=\textwidth}
+%\small
+%\begin{tabular}{| c | c | c | c |}
+%\hline
+%  & \multicolumn{3}{c|}{\textit{Results}}\\
+% \hline 
+ % & \textbf{Dispense} & \textbf{} & %\textbf{Notify}\\
+ %\textit{Conditions} & \textbf{Medication} & %textbf{Record data} & \textbf{User}\\
+ %\hline 
+ %Date/Time = DispensingSchedule & TRUE & TRUE & %TRUE\\
+ %\hline
+  %Date/Time != DispensingSchedule & FALSE & FALSE & FALSE\\
+ %\hline
+ % ManualRequest & TRUE & TRUE & FALSE\\
+ %\hline
+ % !ManualRequest & FALSE & FALSE & FALSE\\
+ % \hline
+ %  PillCollected & FALSE & TRUE & FALSE\\
+ %\hline
+ % !PillCollected & FALSE & TRUE & TRUE\\
+ %\hline
+ %PillDispensed & FALSE & TRUE & FALSE\\
+ %\hline
+ %!PillDispensed & FALSE & TRUE & TRUE\\
+ %\hline
+ % UserInputs & X & X & X\\
+ %\hline
+%\end{tabular}
+%\end{adjustbox}
+%\end{center}
+%\caption{Pill Dispenser Behaviour Table}
+%\end{table}
+
+
+\section{System Requirements}
+
+\subsection{Functional Requirements}
+\begin{enumerate}
+    \item The dispenser will dispense pouches with 99.9\% effectiveness.
+    \item The dispenser must dispense the correct pouch/pouches at the correct time in accordance with a set schedule.
+    \item The dispenser will keep track of how many pouches are yet to be dispensed and will tell the user when it is nearly or entirely empty.
+    \item The dispenser must verify that the medication was successfully dispensed.
+    \item The dispenser must know if and when a dispensed pouch is collected/retrieved by the user and records the event.
+    \item The dispenser must keep an accurate real-time clock and must be configurable to the user.
+    \item The dispenser must be able to hold and dispense McKesson PACMED strip packages.
+    \item The dispenser must notify the user when it is time to take a scheduled medication.
+    \item The dispenser must allow the user to manually dispense pouches as necessary. 
+    \item The dispenser must allow the user to update the current dispensing schedule as necessary.
+    \item The dispenser must store adherence data on local non-volatile memory.
+    \item The user must be able to see adherence data via the user interface or through a direct connection to the device (ex. USB).
+    \item The dispenser must not damage any pills during the dispensing process.
+    \item All moving parts/hazards within the device must be safely concealed to prevent user injury.
+    \item The system must be able to identify when a jam occurs and provide instruction to the user.
+\end{enumerate}
+
+\subsection{Non-Functional Requirements}
+\begin{enumerate}
+    \item The dispenser shall dispense a pouch within a reasonable time period ($<$ 15s).
+    \item The dispenser shall be easy to set-up with intuitive instructions.
+    \item The dispenser shall appear aesthetically pleasing.
+    \item The dispenser shall consume minimal power.
+    \item The dispenser be small enough to fit on a counter-top.
+     \item The dispenser must enter a sleep state if it has had no user interaction for longer than 2 minutes.
+\end{enumerate}
+
+\subsection{Requirement Descriptions}
+\setlength{\parindent}{0pt} %Automatic indenting turned off past this point.
+
+%-----------------------
+\subsubsection*{FR1: The dispenser will dispense pouches with 99.9\% effectiveness.} 
+Rationale: Dispensing an improper pouch or damaging the pills inside the pouch can cause serious harm to the user.  
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_PillCollected
+    \item m\_PillDispensed
+    \item m\_DispensingSchedule
+    \item c\_AdherenceStatistics
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system must perform all dispensing actions with 99.9\% effectiveness.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The required pouch is cut open and dispensed at the required time.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system has jammed
+    \begin{itemize}
+        \item The system will stop all current operations and notify the user. The jam must be corrected to continue operation.
+    \end{itemize}
+    \item Adherence save/load data corrupted.
+    \begin{itemize}
+        \item The system will notify the user and disable further read/writes.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR2: The dispenser must dispense the correct pouch/pouches at the correct time in accordance with a set schedule.}
+Rationale: Dispensing an improper pouch  can cause serious harm to the user.  
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_PillDispensed
+    \item m\_DispensingSchedule
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item  The device shall dispense according to the m\_DispensingSchedule variable and detect success/error through the m\_PillDispensed variable.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+     \item The required pouch is cut open and dispensed at the required time.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The saved schedule data has corrupted
+    \begin{itemize}
+        \item The system will stop all current operations and notify the user. The user must re-input all dispense times
+    \end{itemize}
+    \item The system has jammed
+    \begin{itemize}
+        \item The system will stop all current operations and notify the user. The jam must be corrected to continue operation.
+    \end{itemize}
+        \item The next pouch in queue is the incorrect pouch for the current dispensing period.
+    \begin{itemize}
+        \item The system will stop all current operations and notify the user. The pouch will be discarded into a bin internally.
+        \item This scenario will become prevalent if a missed dose is encountered.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR3: The dispenser will keep track of how many pouches are yet to be dispensed and will tell the user when it is nearly or entirely empty.}
+Rationale: This information will allow the user to plan their next prescription renewal.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_DispensingSchedule
+\end{itemize} 
+\bigskip
+Performance Requirements: 
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item With the assumed knowledge of the m\_DispensingSchedule, the remaining pouches left will be calculated as dispensing occurs.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The device will display an audible/visible alarm notifying the user on their low inventory.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item A miscalculation occurs causing an attempted dispense when there is no inventory or the next pouch in queue is not correct.
+    \begin{itemize}
+        \item The system will check if there is a pouch to dispense and if so, it is the correct pouch. If not, the same event handling will be followed from FR2. 
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR4: The dispenser must verify that the medication was successfully dispensed.}
+Rationale: Retrieving medication when not desired can cause harm to the user or damage to the device or the strip pack.
+\\\\
+Variables of interest: 
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_PillDispensed
+    \item c\_AudioVisualAlarm
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system shall monitor the system state through the monitored variables and notify the user when the medication is safe to collect.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item A reflective sensor in the collection area will be polled to detect when a pouch has been dispensed. Once this sensor is triggered, the medication is safe to collect and the user will be notified.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system has jammed
+    \begin{itemize}
+        \item The system will stop all current operations and notify the user. The jam must be corrected to continue operation.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR5: The dispenser must know if and when a dispensed pouch is collected/retrieved by the user and records the event.}
+Rationale: Collecting this data will allow the device to store adherence statistics for review by the user.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item c\_AdherenceStatistics
+    \item m\_PillDispensed
+    \item m\_DateTime
+    \item m\_PillCollected
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Using the monitored variables, the system shall write to memory the date and time of the collection in a CSV format.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The device will monitor the collection sensor. If collection is detected, a timestamp in the proper format will be created and written to memory with a dispensed tag. If not collection occurs after a specified timeout a missed dose tag will be attached to the written timestamp.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item A non-dispensing event triggers the collection sensor
+    \begin{itemize}
+        \item The system will check if a dispensing state had just completed successfully. If not, the trigger would be ignored.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR6: The dispenser must keep an accurate real-time clock.}
+Rationale: A non-accurate RTC can cause undesired dispense actions to occur. A configurable RTC will allow the user to set the device time to their local time.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_DateTime
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The onboard RTC should tick in reference to the date and time specified by the user.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item On first startup, the device would allow the user to set the current device time to their local time. The RTC time will then be displayed on the UI and tick accordingly.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item RTC clock becomes out-of-sync (e.g. unexpected device shutdown).
+    \begin{itemize}
+        \item The user will be forced to update the onboard RTC. The device will then ensure the next pouch to dispense is correct and notify accordingly.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR7: The dispenser must be able to hold and dispense McKesson PACMED strip packages.}
+Rationale: Ensuring the device is designed to hold the strip packages securely will ensure the package into a undesirable position.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item k\_StripPackageLength
+    \item k\_StripPackageWidth
+    \item k\_StripPackageHeight
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The package should not be put into a undesirable position causing operational errors due to circumstances cause by the enviroment the device is in.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The device is opened and the user places the package into the device. Closing the device ensures the strip package will remain in place.
+\end{itemize}
+\bigskip
+Undesired Event Handling: N/A
+\\\\
+
+%-----------------------
+\subsubsection*{FR8: The dispenser must notify the user when it is time to take a scheduled medication.}
+Rationale: Without a notification, the user may forget or disregard their medication obligation.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_PillDispensed
+    \item c\_AudioVisualAlarm
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system must provide audible/visual alarms to user when desired.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item After a successful dispense occurs, a visible notification will be displayed on the device and an audible tone will be emitted.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Alarm fails to fire or dismiss.
+    \begin{itemize}
+        \item The device will perform a soft reset.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR9: The dispenser must allow the user to manually dispense pouches as necessary.}
+Rationale: If the user is going to be away from the machine during their dispensing periods, they are still required to take their medication.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_UserInputs
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item An interaction on the user interface must trigger a dispensing action.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item A press of the manual dispense button on the user interface will force a dispensing action to occur.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The requested dispense is not performed.
+    \begin{itemize}
+        \item The undesired event handling from FR4 should be followed.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+
+%-----------------------
+\subsubsection*{FR10: The dispenser must allow the user to update the current dispensing schedule as necessary.}
+Rationale: Dispensing times should be at the convince of the user, not the device.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_DispensingSchedule
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The user should be able to retrieve the current state of the monitored variable and configure the values to their needs. The device should store this variable locally.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The user will trigger the edit dispense times page through a button press. This page will display the current dispense times  along with an edit button for each time. A button press on the edit button will display the increment/decrement time buttons to make the necessary changes.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Save/load data is corrupted.
+    \begin{itemize}
+        \item The user will be notified that the data was corrupted and force the user to set new values.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR11:  The dispenser must store adherence data on local non-volatile memory.}
+Rationale: Storing the data locally and in non-volatile memory ensures data will be available regardless of unexpected device events. 
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item c\_AdherenceStatistics
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item On change of the monitored variable, the device must store the new data in its local non-volatile memory.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item When a new adherence statistic is available, it will be stored on-board the device.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Save/load data is corrupted.
+    \begin{itemize}
+        \item The user will be notified that the data was corrupted. The sector of memory will be cleared.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR12:  The user must be able to see adherence data via the user interface or through a direct connection to the device (ex.  USB).}
+Rationale: Once collected the user and/or their caregiver must be able see/extract adherence data so they can gain insight into the user's habits.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item c\_AdherenceStatistics
+    \item m\_UserInputs
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Data must be displayed on the user interface in a timely manner.
+    \item Data must downloaded from the device in a timely manner. 
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item While in the ready state the user can access their adherence data by sending a command through the user interface. Likewise, they may initiate a download request from the UI to an external device.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Adherence data is corrupted
 \begin{itemize}
-    \item The dispenser will release the scheduled blister contents at the scheduled time. 
-    \item The dispenser will keep track of how many blisters are yet to be dispensed.
-    \item The dispenser will only allow the user to take the medication if safe to do so.
-    \item Verify that a blister was dispensed when it was scheduled to.
+    \item User will be notified that the data is corrupted.
 \end{itemize}
-\subsubsection{Clock Requirement}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR13:  The dispenser must not damage any pills during the dispensing process.}
+Rationale: The end user must receive their medication from the system in the same manor in which they would if they have done it themselves.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item c\_DispensingMechanism
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system must accurately cut each pouch along the edge as to reduce chance of blade-pill interaction.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The pouch is cut and dispensed in such a manor that no pills are damaged.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Pill is damaged while the pouch is being cut and dispensed.
+    \begin{itemize}
+        \item The user must be able to retrieve any remaining fragment of the damaged pill from the collection area.
+        \item The user must be able to remove the strip package and attempt to re-calibrate.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{FR14:  All moving parts/hazards within the device must be safely concealed to prevent user injury.}
+Rationale: User interacting with the device in a normal manor should not bear a risk of injury.
+\\\\
+Variables of interest: N/A
+\\ \\
+Performance Requirements: N/A
+\\ \\
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The device cuts and dispenses pouches internally and does not allow the user to retrieve the pouch until it it safe to do so.
+\end{itemize}
+\bigskip
+Undesired Event Handling: N/A
+\\ \\
+
+%-----------------------
+\subsubsection*{FR15: The system must be able to identify when a jam occurs and provide instruction to the user.}
+Rationale: Knowing when the system has a jam is critical in mitigating potential damage pills and the critical components of the dispensing mechanism.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_PillDispensed
+    \item c\_DispensingMechanism
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Utilizing the variables of interest the device will identify a jam in a timely manner.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item When a dispensing event is triggered a pill pouch is cut and transported to the collection area.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Jam is not identified and the device proceeds with the dispensing event.
+    \begin{itemize}
+        \item An emergency stop option will be available for the user.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{NFR1: The dispenser shall dispense a pouch within a reasonable time period ($\leq$15s).}
+Rationale: Once the user acknowledges the alarm they should not have to wait long for the pouch to be dispensed. Improves user experience.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_PillDispensed
+    \item c\_DispensingMechanism
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item After alarm acknowledgement the pouch must be dispensed within 15 seconds.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item When a scheduled dispense time is reached the system begins to alarm. The user acknowledges the alarm and a pouch is cut and dispensed into the collection area.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The pouch takes over 15 seconds to dispense.
+    \begin{itemize}
+        \item The event will be recorded in the system log.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{NFR2: The dispenser shall be easy to set-up with intuitive instructions.}
+Rationale: Users of the product should be given adequate instruction on how to set up the device. Intuitive, easy to understand instructions/set-up processes leave a great first impression of the device on the user.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_UserInputs
+    \item m\_StripPackageSeated
+    \item c\_SeatedErrorNotifier
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Average users will be able to unbox and set-up the device in under 10 minutes.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Once powered on, the user interface of the device will walk the user step-by-step through set-up, providing feedback throughout the process.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system skips the set-up sequence and enters the ready-state.
+    \begin{itemize}
+        \item The device must have reset functionality that returns it to the set-up state.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%-----------------------
+\subsubsection*{NFR3: The dispenser shall appear aesthetically pleasing.}
+Rationale: Creating a device that users do not find aesthetically pleasing is likely to inhibit user adoption and may encourage them to place the device in low vacancy areas within the home.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item k\_DispenserLength
+    \item k\_DispenserWidth
+    \item k\_DispenserHeight
+\end{itemize} 
+\bigskip
+Performance Requirements: N/A
+\\ \\
+Normal Operation: N/A
+\\ \\
+Undesired Event Handling: N/A
+\\
+%-----------------------
+\subsubsection*{NFR4: The dispenser shall consume minimal power.}
+Rationale: The device should not consume more power than necessary preventing unnecessary utility bill increases.
+\\\\
+Variables of interest: N/A
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Peak power consumption of the device will be below 15W.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Maximum power draw will come from the device while it is alarming, cutting, and dispensing a pouch. When in the ready state for longer than 2 minutes the device will enter a sleep mode to reduce power consumption.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system draws a larger than normal current from the power supply.
+    \begin{itemize}
+    \item The device will monitor power consumption and will enter a safe state when an unexpected power draw event occurs.
+    \end{itemize}
+\end{itemize}
+\bigskip
+%-----------------------
+\subsubsection*{NFR5: The dispenser be small enough to fit on a counter-top.}
+Rationale: Having the device be the same size as a small kitchen appliance improves convenience, and allows for a flexible array of set-up locations.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item k\_DispenserLength
+    \item k\_DispenserWidth
+    \item k\_DispenserHeight
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Footprint of the device should be no larger than the average size toaster (20cm x 30cm approx.)
+\end{itemize}
+\bigskip
+Normal Operation: 
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Once set-up the device lives on the kitchen counter, end-table, dresser, etc.
+\end{itemize}
+\bigskip
+Undesired Event Handling: N/A
+\\ \\
+
+%-----------------------
+\subsubsection*{NFR6: The dispenser must enter a sleep mode if it has had no user interaction for longer than 2 minutes.} 
+Rationale: Save energy and preserve the lifespan of user interface components.
+\\\\
+Variables of interest:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item m\_UserInputs
+    \item m\_DateTime
+\end{itemize} 
+\bigskip
+Performance Requirements:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item Overall power consumption of the device should decrease to the minimum achievable level for basic functionality.
+\end{itemize}
+\bigskip
+Normal Operation:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item If the dispenser has been in the ready state for more than 2 minutes without user interaction the device will turn off the user interface while it continues to monitor the time.
+\end{itemize}
+\bigskip
+Undesired Event Handling:
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item The system does not enter a sleep state.
+    \begin{itemize}
+        \item The device will monitor its power consumption and identify that an error has occurred.
+    \end{itemize}
+\end{itemize}
+\bigskip
+
+%%%% NEED TO ADD SECTION ABOUT LIKELIHOOD TO CHANGE AND WHY
+\subsection{Requirements Likely to Change}
+\noindent All requirements not listed below are unlikely to change.
+
 \begin{itemize}
-    \item Keep an accurate clock to ensure the blisters are dispensed as scheduled.
-    \item Be able to keep accurate clock through power outage.
-\end{itemize}
-\subsubsection{Software Requirement}
-\begin{itemize}
-    \item Securely transfer information to and from the pill dispenser and the web client.
-    \item Schedule designed so it may be sent to the dispenser in easy fashion.
-    \item Provide educational information for the client in an easy to access manner.
+    \item FR12 - The user must be able to see adherence data via the user interface or through a directconnection to the device (ex.  USB).
+    \item FR15 - The system must be able to identify when a jam occurs and provide instruction to the user.
+    \item NFR1 - The dispenser shall dispense a pouch within a reasonable time period ($<$ 15s) 
+    \item NFR6 - The dispenser must enter a sleep state if it has had no user interaction for longer than 2 minutes.
 \end{itemize}
 
-\subsection{Normal Operation}
-%Please note: The normal operation captured below would be encountered \textbf{after} a refill of the pill silos has been done. The refill procedure is not encapsulated. It also assumes the setup of the internal clock of the device has been done and a medication schedule has been uploaded to the system.%
-
-Please note: The normal operation captured below would be encountered \textbf{after} a blister pack has been loaded into the device. The refill procedure is not encapsulated. It also assumes the setup of the internal clock of the device has been done and a medication schedule has been uploaded/inputted into the system.
-
-\begin{itemize}[leftmargin=*]
-    \item The system is powered ON.
-\end{itemize}
-\begin{itemize}[label={}]
-\item The system is plugged into power and the device is turned on. 
-\end{itemize}
-\begin{itemize}[leftmargin=*]
-    \item Self system diagnosis and system preparation.
-\end{itemize}
-\begin{itemize}[label={}]
-\item The system will begin a system diagnosis to ensure there are no issues present with the dispensing mechanism and that the blister pack is seated properly. This check will also ensure the micro-controller is functioning as intended. At this step, the device will analyze the users medication schedule to prepare for either the waiting period or dispensing time.
-\end{itemize}
-\begin{itemize}[leftmargin=*]
-    \item Schedule dispensing time has not been reached (holding period).
-\end{itemize}
-\begin{itemize}[label={}]
-\item In this state, the system is in a holding period. It polls the onboard RTC and compares the fetched time to the scheduled dispensing times at a set interval to determine when dispensing should occur.  
-\end{itemize}
-\begin{itemize}[leftmargin=*]
-    \item Schedule dispensing time has been reached (dispense).
-\end{itemize}
-\begin{itemize}[label={}]
-\item At this point, the device begins the dispensing process. The device reads what blister should be dispensed from the stored schedule and dispenses those pills using the onboard dispensing mechanism. After all dispensing is complete, the device returns to the holding state.
-\end{itemize}
-
-\subsection{Undesired Event Handling}
-The safety of the pill dispensing machine is of critical importance. As such, the device must be able to account for any number of undesired events and have thoughtful, user-friendly remediation. Below is a list of undesired events that may occur and their potential remediation. The included events have been deemed as the most likely to occur.
-\subsubsection{Pill Dispenser Jam}
-The system should be able to determine if it has jammed, attempt to fix itself, and if unsuccessful, inform the user how to return the device to a functioning state.
-\subsubsection{Power Outage}
-The system should be able to account for a power outage, returning to its previous state, and resuming operation once re-powered.
-\subsubsection{Failed Alarm/Reminder}
-The system should be able to detect if the alarming mechanisms are malfunctioning and should inform the user how to return the device to a functioning state.
-\subsubsection{Data Transfer Error}
-The system should be able to determine whether a data transfer error occurred when being programmed by the pharmacist, inform the programmer of the error and prompt the pharmacist to retry the data download.
-\subsubsection{Pill Not Taken}
-The system should be able to detect whether a pill was not taken by the user and determine whether the user should take the dosage or remove and replace it with the next dosage.
-
-\section{Requirements Likely to Change}
-\begin{itemize}
-    \item Ability to manually release pills earlier than scheduled.
-    \item The variety of blister pack sizes available to be dispensed.
-    \item The inclusion of pill instructions.
-    \item End-user's ability to change the on-device clock.
-    \item How the device will be setup.
-    \item The manner in which the schedule is updated to the device.
-    \item Who has authority to setup and prepare the device for home-use.
-    \item The level of detail included in preparing the pill dispensing schedule.
-    \item Notifications to loved ones or care-taker.
-    \item The upper-limit time required to successfully dispense a pill.
-    \item Mechanism for data upload and download from database system.
-\end{itemize}
-
-\section{Requirements Unlikely to Change}
-\begin{itemize}
-    \item 99.9\% effectiveness
-    \item Ability to dispense the correct blister of pills when required.
-    \item Ability to use a schedule for the release of pills.
-    \item Ability to know what blister is being dispensed.
-    \item Ability to collect data on pill adherence.
-    \item Ability to transfer data between the device and scheduling portal securely.
-    \item Easy to use software for medical professionals.
-    \item Easy to use dispensing machine for end-user.
-    \item Ability to dispense all types of pill sizes.
-    \item Notification for when to take scheduled pills.
-    \item Accurate on-board clock.
-    \item Cannot damage any pill type when dispensing.
-    \item Fit on a counter-top.
-    \item Low power consumption.
-    \item Follows all mechanical and electrical safety laws.
-\end{itemize}
+\pagebreak
 \section{References}
+
 No reference material was used in the creation of this document.
 
 \end{document}

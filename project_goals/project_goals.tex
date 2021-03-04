@@ -1,171 +1,91 @@
-%Usually an article, 12pt font, with a seperate title page
-\documentclass[12pt,titlepage]{article}
-%Ability to include figures easily, and eps files
-\usepackage{graphicx}
-\usepackage{grffile}
-\usepackage{epstopdf}
-\usepackage{epsfig}
-\usepackage[euler]{textgreek}
-%Hide links on autoref, and call each piece a section
-\usepackage[hidelinks]{hyperref}
-\def\subsectionautorefname{Section}
-\def\subsubsectionautorefname{Section}
-%Allows symbols, captions, math
-\usepackage{amssymb}
-% \usepackage{amsmath} %can also use to align equations
-\usepackage{caption}
-%Allow acronyms, with the list beneath
-\usepackage[nolist,nohyperlinks]{acronym}
-\begin{acronym}
-\end{acronym}
-%Use natbib for bibliography
-\usepackage[square,super,comma,sort&compress]{natbib}
-%Style changes, indent all paragraphs, use the full page size, change the section heads, nice fractions, nice tables
-\usepackage{indentfirst}
-\usepackage[margin=1in]{geometry}
-\usepackage{setspace}
-\onehalfspacing
-\usepackage[small]{titlesec}
-\titlelabel{\thetitle. }
-\usepackage{nicefrac}
-\usepackage{booktabs}
-\newcommand\tab[1][1cm]{\hspace*{#1}}
-%Allows for me to non-justify some regions
-\usepackage{ragged2e}
-
-% Another package for doing title of assignment --> got it from Joel
-%\usepackage{titlesec}
-%\titleformat{\subsection}[runin]
-%{\normalfont\large\bfseries}{\thesubsection}{1em}{}
-%\titleformat{\subsubsection}[runin]
-%{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
-\usepackage{pdflscape}
-\usepackage{enumitem}% http://ctan.org/pkg/enumitem
-\usepackage{adjustbox}
+%Usually an article, 12pt font, with a separate title page
+\documentclass[12pt]{article}
+\usepackage{preamble}
 
 
 \begin{document}
 
-\begin{titlepage}
-
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
-
-\center % Center everything on the page
- 
-%	HEADING SECTIONS
-
-\textsc{\LARGE McMaster University}\\[1.5cm] % Name of your university/college
-\textsc{\Large MECHTRON 4TB6A}\\[0.5cm] % Major heading such as course name
-\textsc{\large Mechatronics \& Software Engineering Capstone}\\[0.5cm] % Minor heading such as course title
-
-%	TITLE SECTION
-\vspace{1cm}
-\HRule \\[0.2cm]
-{ \Large \vspace{0.25cm}  \textsc{  \LARGE Project Goals \& Description} \vspace{0.3cm} }  % Title of your document
-\HRule \vspace{1cm}
-
-\textsc{\LARGE Health Mate - Pill Dispenser}
- 
- \begin{figure}[h]
-  \centering
-  \includegraphics[width=.4\linewidth]{../ApexEngineering.png}
-\end{figure}
- \vspace{1cm}
- 
-%----------------------------------------------------------------------------------------
-%	AUTHOR SECTION
-%----------------------------------------------------------------------------------------
-
-\begin{table}[ht!]
-\centering
-\begin{tabular}{c c c}
-\toprule
-\textbf{Name} & \textbf{Student Number} & \textbf{McMaster Email}         \\ \midrule
-Justin Ballaro & 400015482 & ballaroj@mcmaster.ca \\
-Joel Bates & 001420696 & batesjj@mcmaster.ca \\
-Brodie Bresette & 400029059 & bresettb@mcmaster.ca \\
-Daniel Pietrangelo & 400010287 &  pietrand@mcmaster.ca \\
-Nicholas D'Angelo & 400018631 &  dangelon@mcmaster.ca  \\
-  \bottomrule
-\end{tabular}
-\label{Tab:HU}
-\end{table}
-
-%	DATE SECTION
-\vfill
-{\large Sunday, October 4, 2020}\\[3cm] % Date, change the \today to a set date if you want to be precise
- % Fill the rest of the page with whitespace
-
-\end{titlepage}
-
+% Edit title page in the titlepage.tex file.
+\input{titlepage.tex} 
 \pagebreak
+% header and footer settings
+\pagestyle{fancy} \fancyhf{}
+\lhead{\fontsize{10pt}{10pt}\selectfont System Requirements} \rhead{\fontsize{10pt}{10pt}\selectfont Revision \rev} \cfoot{\thepage}
+
+% Edit table of revisions in tableofrevisions.tex
 \pagenumbering{roman}
+\input{tableofrevisions.tex}
+\pagebreak
+\tableofcontents
 \pagebreak
 \pagenumbering{arabic}
+
+%----------Begin adding text here.----------
 
 \section{Project Overview}
 As a person begins to age, there is often an increase in the amount of medication taken to keep healthy. However, the medication taken is only as effective as the abidance by the patient to take the prescribed medication at the designated times. Non-adherence to prescribed medicines can lead to further health complications; along with unnecessary visits to physicians and avoidable health costs. 
 
-Apex Engineering is partnering with Precision Medicines Corporations to develop a smart pill dispenser to help with the non-adherence of prescription pills that many individuals face. The pill dispenser will be paired with a public facing website and an online portal where a patient, physician and pharmacist can connect and ensure the proper pill schedule is being followed correctly. The online portal will also allow the patients health team to track in depth non-adherence statistics. The public facing website will allow patients to receive up to date health education from medical professionals.
+Apex Engineering is partnering with Precision Medicines Corporations to develop a smart pill dispenser to help with the non-adherence of prescription pills that many individuals face. The pill dispenser will be paired with the PACMED pill strip packs and will index, cut and dispense the desired strip pack at a user specified time in a dispensing period (breakfast, lunch, supper or bedtime). The dispenser will also keep track of adherence and collection data for the user to review at a later time.  
 
 \section{Minimum Viable Product Goals}
 \begin{center}
-\begin{adjustbox}{max width=.75\textwidth}
+\begin{adjustbox}{max width=\textwidth}
 \small
-\begin{tabular}{|p{0.5\textwidth}|p{0.4\textwidth}|}
+\begin{tabular}{|p{0.1\textwidth}|p{0.5\textwidth}|p{0.4\textwidth}|}
  \hline
- \textbf{Goal} & \textbf{Importance of Goal} \\ 
+ \textbf{Goal} & \textbf{Goal Description} & \textbf{Importance of Goal} \\ 
  \hline
-Dispense one pill at a time from a single silo no matter pill size. &
+ PG1 &
+   Dispense opened medication pouches into designated area of the device in adherence with a predefined schedule. &
 \begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt]
-  \item Allows adherence to assigned pill schedule given by health professional.
-  \item Proper count of each pill being dispensed.
+  \item Adherence and collection data is more attainable through one area of collection.
+  \item Medication dispensed only when requested.
+  \item User has easier access to medication.
+  \item User does not have to worry about/struggle to open pouches itself.
   \end{itemize}\\ 
  \hline
-Develop an secure interface to Pill Dispenser. & 
+ PG2 &
+ The user will be able to interact with the device through a user interface which will allow them to view/change parameters. & 
 \begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt]
-  \item Gives health professional the ability to create and upload pill schedule.
-  \item Download and display adherence statistics stored on device.
+  \item This interaction will allow user to set parameters that fits their needs (e.g. dispense times)
   \end{itemize}\\ 
  \hline
-Store statistics from Pill Dispenser. & 
-\begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt]
-  \item Track adherence data.
-  \item Allows patient and health professionals to get an overall view of patients health.
-  \end{itemize}\\ 
- \hline
-Develop public facing website.  & 
-\begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt]
-  \item Receive up to date health education from medical professionals.
-  \item Provide information about Pill Dispenser.
+ PG3 &
+The device will aim to improve medication adherence through the use of various tools (e.g. notifications, data collection)  & 
+\begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt] 
+  \item Improving the medication adherence of end users is the primary motivation for the project.
   \end{itemize}\\ 
  \hline
 \end{tabular}
 \end{adjustbox}
 \end{center}
 
+\pagebreak
+
 \section{Stretch Goals}
 \begin{center}
-\begin{adjustbox}{max width=0.85\textwidth}
+\begin{adjustbox}{max width=\textwidth}
 \small
-\begin{tabular}{|p{0.5\textwidth}|p{0.4\textwidth}|}
+\begin{tabular}{|p{0.1\textwidth}|p{0.5\textwidth}|p{0.4\textwidth}|}
  \hline
- \textbf{Goal} & \textbf{Importance of Goal} \\ 
+ \textbf{Goal} & \textbf{Goal Description} & \textbf{Importance of Goal} \\ 
  \hline
- Dispense a single pill from multiple silos. &
-\begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt]
-  \item Allows health professionals to build more complex pill schedules.
-  \end{itemize}\\ 
- \hline
+ SG1 &
  Aesthetic modifications to overall product. & 
 \begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt]
   \item Bring a more complete model to market.
   \end{itemize}\\ 
  \hline
-Modular pill silo design that is easy to refill and get data. & 
+  SG2 &
+ Provide in depth debugging tools for easy troubleshooting & 
 \begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt]
-  \item Allow for user to add more silos when needed.
-  \item Ease of refill by pharmacist; update patient data.
+  \item Provide crash reports and allow for future device improvements/bug fixes.
+  \end{itemize}\\ 
+ \hline
+   SG3 &
+ Read information on strip packaging & 
+\begin{itemize}[noitemsep,topsep=0pt,leftmargin=13pt]
+  \item Obtain schedule/pouch information.
   \end{itemize}\\ 
  \hline
 \end{tabular}
@@ -173,4 +93,6 @@ Modular pill silo design that is easy to refill and get data. &
 \end{center}
 
 
+
 \end{document}
+

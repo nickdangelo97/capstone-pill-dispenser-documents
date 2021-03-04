@@ -1,0 +1,79 @@
+%Usually an article, 12pt font, with a seperate title page
+\documentclass[12pt,titlepage]{article}
+%Ability to include figures easily, and eps files
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{epstopdf}
+\usepackage{epsfig}
+\usepackage[euler]{textgreek}
+%Hide links on autoref, and call each piece a section
+\usepackage[hidelinks]{hyperref}
+\def\subsectionautorefname{Section}
+\def\subsubsectionautorefname{Section}
+%Allows symbols, captions, math
+\usepackage{amssymb}
+% \usepackage{amsmath} %can also use to align equations
+\usepackage{caption}
+%Allow acronyms, with the list beneath
+\usepackage[nolist,nohyperlinks]{acronym}
+\begin{acronym}
+\end{acronym}
+%Use natbib for bibliography
+\usepackage[square,super,comma,sort&compress]{natbib}
+%Style changes, indent all paragraphs, use the full page size, change the section heads, nice fractions, nice tables
+\usepackage{indentfirst}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage[small]{titlesec}
+\titlelabel{\thetitle. }
+\usepackage{nicefrac}
+\usepackage{booktabs}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+%Allows for me to non-justify some regions
+\usepackage{ragged2e}
+
+% Another package for doing title of assignment --> got it from Joel
+%\usepackage{titlesec}
+%\titleformat{\subsection}[runin]
+%{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+%\titleformat{\subsubsection}[runin]
+%{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\usepackage{pdflscape}
+\usepackage{enumitem}% http://ctan.org/pkg/enumitem
+\usepackage{adjustbox}
+\usepackage{float}
+\usepackage{tikz}
+
+
+
+
+\begin{document}
+
+{\fontfamily{cmss}\selectfont
+\begin{center}
+    \text{\LARGE Advance – The Automated Pill Pack Dispenser}
+\end{center}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.495\textwidth]{./full.png}
+    \includegraphics[width=0.8\textwidth]{./Full_Assembly.png}
+    \label{fig:sidebyside}
+\end{figure}
+
+\begin{itemize}
+    \item Fully-automated pill strip pack dispenser.
+    \item Dispenses the correct sachet(s) at the correct time in accordance with a set schedule.
+    \item Integrated with a touch-display, alarm and LED lights.
+    \item Notifies the user when it is time to take a scheduled medication.
+    \item Sensors to track pill adherence.
+    \item Quick and easy setup.
+    
+\end{itemize}
+
+\textbf{Retail Cost:} \$200 -\$300
+
+}
+
+\end{document}
